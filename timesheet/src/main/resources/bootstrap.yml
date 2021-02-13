@@ -1,0 +1,10 @@
+spring:
+  application:
+    name: timesheet
+  cloud:
+    config:
+      name: timesheet
+      label: abc
+      uri: "http://localhost:8888"
+  profiles:
+    active: development

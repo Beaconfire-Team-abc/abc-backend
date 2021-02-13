@@ -1,0 +1,21 @@
+server:
+  port: 8081
+
+spring:
+  application:
+    name: gateway
+  cloud:
+    gateway:
+      routes:
+        - id: employee
+          uri: lb://employee
+          predicates:
+            - Path=/employee/**
+        - id: timesheet
+          uri: lb://timesheet
+          predicates:
+            - Path=/timesheet/**
+        - id: profile
+          uri: lb://profile
+          predicates:
+            - Path=/profile/**

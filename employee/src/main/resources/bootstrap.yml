@@ -1,0 +1,10 @@
+spring:
+  application:
+    name: employee
+  cloud:
+    config:
+      name: employee
+      label: abc
+      uri: "http://localhost:8888"
+  profiles:
+    active: development

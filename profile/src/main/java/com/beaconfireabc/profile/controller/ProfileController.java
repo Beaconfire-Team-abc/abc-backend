@@ -18,16 +18,6 @@ import javax.websocket.server.PathParam;
 public class ProfileController {
     private ProfileService profileService;
 
-
-    //--------test config
-    private HibernateProperty testProperty;
-
-    @Autowired
-    private void setTestConfig(HibernateProperty config){this.testProperty = config;}
-    //------------------
-
-
-
     @Autowired
     public void setProfileService(ProfileService profileService){this.profileService = profileService;}
 

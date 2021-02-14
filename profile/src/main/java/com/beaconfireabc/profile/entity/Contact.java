@@ -27,6 +27,12 @@ public class Contact implements Serializable {
     @JoinColumn(name = "person_id")
     private Person person;
 
+    @Column(name = "phone")
+    private String phone;
+
+    @Column(name = "name")
+    private String name;
+
     @Column(name = "relationship")
     private String relationship;
 

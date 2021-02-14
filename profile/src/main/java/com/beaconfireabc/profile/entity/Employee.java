@@ -42,12 +42,6 @@ public class Employee implements Serializable {
     @Column(name = "car")
     private String car;
 
-    @Column(name = "visa_start_date")
-    private String visaStartDate;
-
-    @Column(name = "visa_end_date")
-    private String visaEndDate;
-
     @Column(name = "driver_license")
     private String driverLicense;
 

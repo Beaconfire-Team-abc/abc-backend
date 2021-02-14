@@ -34,6 +34,12 @@ public class Person implements Serializable {
     @Column(name = "cell_phone")
     private String cellphone;
 
+    @Column(name = "remaining_floading_days")
+    private int remainingFloadingDays;
+
+    @Column(name = "remaining_vacation_days")
+    private int remainingVacationDays;
+
     @Column(name = "alternate_phone")
     private String alternatePhone;
 

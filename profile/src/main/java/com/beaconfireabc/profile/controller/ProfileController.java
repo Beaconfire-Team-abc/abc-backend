@@ -2,10 +2,7 @@ package com.beaconfireabc.profile.controller;
 
 import com.beaconfireabc.profile.config.HibernateConfig;
 import com.beaconfireabc.profile.config.HibernateProperty;
-import com.beaconfireabc.profile.domain.PersonRequest;
-import com.beaconfireabc.profile.domain.PersonResponse;
-import com.beaconfireabc.profile.domain.RemainDaysRequest;
-import com.beaconfireabc.profile.domain.ServiceStatus;
+import com.beaconfireabc.profile.domain.*;
 import com.beaconfireabc.profile.service.ProfileService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -33,26 +30,49 @@ public class ProfileController {
         PersonRequest responsePerson = this.profileService.getProfileByUserId(Integer.parseInt(userId));
         if (responsePerson != null) {
             personResponse.setPerson(responsePerson);
-            prepareResponse(personResponse, true, "");
+            preparePersonResponse(personResponse, true, "");
         } else {
-            prepareResponse(personResponse, false, "No person found.");
+            preparePersonResponse(personResponse, false, "No person found.");
         }
 
         return personResponse;
     }
 
     @PostMapping(value="/update-remain-days/{userId}")
-    public void updateRemainDays(@RequestBody RemainDaysRequest remainDaysRequest, @PathVariable String userId){
-//        this.profileService.updatePersonByUserId(Integer.parseInt(userId), remainDaysRequest);
+    public RemainDaysResponse updateRemainDays(@RequestBody RemainDaysRequest remainDaysRequest, @PathVariable String userId){
+        RemainDaysResponse remainDaysResponse = new RemainDaysResponse();
+        RemainDaysRequest updateRequestReturn = this.profileService.updateRemainDaysByUserId(Integer.parseInt(userId), remainDaysRequest);
+        if(updateRequestReturn != null){
+            remainDaysResponse.setRemainDays(updateRequestReturn);
+            prepareRemainDaysResponse(remainDaysResponse, true, "");
+        }
+        else{
+            prepareRemainDaysResponse(remainDaysResponse, false, "Update remaining days fail");
+        }
+        return remainDaysResponse;
     }
 
 
     @PostMapping(value="/update-person/{userId}")
-    public void updateProfile(@RequestBody PersonRequest personRequest, @PathVariable String userId) {
-//        this.profileService.updatePersonByUserId(Integer.parseInt(userId), personRequest);
+    public PersonResponse updateProfile(@RequestBody PersonRequest personRequest, @PathVariable String userId) {
+        PersonResponse personResponse = new PersonResponse();
+        PersonRequest responsePerson = this.profileService.setOrUpdateProfileByUserId(Integer.parseInt(userId), personRequest);
+        if (responsePerson != null) {
+            personResponse.setPerson(responsePerson);
+            preparePersonResponse(personResponse, true, "");
+        } else {
+            preparePersonResponse(personResponse, false, "Update person failure.");
+        }
+
+        return personResponse;
+
     }
 
-    private void prepareResponse(PersonResponse response, boolean success, String errorMessage) {
+    private void preparePersonResponse(PersonResponse response, boolean success, String errorMessage) {
+        response.setServiceStatus(new ServiceStatus(success ? "SUCCESS" : "FAILED", success, errorMessage));
+    }
+
+    private void prepareRemainDaysResponse(RemainDaysResponse response, boolean success, String errorMessage) {
         response.setServiceStatus(new ServiceStatus(success ? "SUCCESS" : "FAILED", success, errorMessage));
     }
 

@@ -24,5 +24,7 @@ public class PersonRequest {
 
     private String address;
 
+    private RemainDaysRequest remainDays;
+
     private List<ContactRequest> emergencyContacts;
 }

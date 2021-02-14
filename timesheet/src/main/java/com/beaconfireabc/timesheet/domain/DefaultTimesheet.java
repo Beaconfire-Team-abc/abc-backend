@@ -1,12 +1,10 @@
 package com.beaconfireabc.timesheet.domain;
 
-
-//import com.querydsl.core.annotations.QueryEntity;
 import lombok.*;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-import java.util.*;
+import java.util.List;
 
 @Getter
 @Setter
@@ -15,8 +13,8 @@ import java.util.*;
 @Builder
 @ToString
 //@QueryEntity
-@Document(collection = "Timesheet")
-public class Timesheet {
+@Document(collection = "DefaultTimesheet")
+public class DefaultTimesheet {
     @Id
     private String id;
     private Integer userID;

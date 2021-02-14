@@ -1,5 +1,6 @@
 package com.beaconfireabc.timesheet.domain;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.*;
 
 @Getter
@@ -8,6 +9,7 @@ import lombok.*;
 @NoArgsConstructor
 @Builder
 @ToString
+//@JsonFormat(shape=JsonFormat.Shape.ARRAY)
 public class Day {
     private String name;
     private String date;

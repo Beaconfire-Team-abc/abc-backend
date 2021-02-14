@@ -5,7 +5,6 @@ import com.beaconfireabc.profile.dao.ContactDAO;
 import com.beaconfireabc.profile.dao.PersonDAO;
 import com.beaconfireabc.profile.domain.ContactRequest;
 import com.beaconfireabc.profile.domain.PersonRequest;
-import com.beaconfireabc.profile.domain.PersonResponse;
 import com.beaconfireabc.profile.domain.RemainDaysRequest;
 import com.beaconfireabc.profile.entity.Address;
 import com.beaconfireabc.profile.entity.Contact;
@@ -21,8 +20,6 @@ import java.util.List;
 
 @Component
 public class ProfileService {
-    private final int DEFAULT_FLOATING_DAY = 3;
-    private final int DEFAULT_VACATION_DAY = 3;
 
     private PersonDAO personDAO;
     private AddressDAO addressDAO;
@@ -40,28 +37,34 @@ public class ProfileService {
     @Transactional
     public PersonRequest getProfileByUserId(Integer id) {
         Person person = personDAO.getPersonByUserId(id);
-        PersonRequest personRequest = new PersonRequest();
+        if(person == null){
+            return null;
+        }
+        else{
+            PersonRequest personRequest = new PersonRequest();
 
-        RemainDaysRequest remainDays = new RemainDaysRequest();
-        remainDays.setRemainingFloadingDays(person.getRemainingFloadingDays());
-        remainDays.setRemainingVacationDays(person.getRemainingVacationDays());
+            RemainDaysRequest remainDays = new RemainDaysRequest();
+            remainDays.setRemainingFloadingDays(person.getRemainingFloadingDays());
+            remainDays.setRemainingVacationDays(person.getRemainingVacationDays());
 
-        List<ContactRequest> contactRequestList = new ArrayList<>();
-        for(Contact contact : person.getContacts()){
-            ContactRequest contactRequest = new ContactRequest();
-            contactRequest.setName(contact.getName());
-            contactRequest.setPhone(contact.getPhone());
-            contactRequest.setEmergencyContact(contact.isEmergency());
-            contactRequestList.add(contactRequest);
+            List<ContactRequest> contactRequestList = new ArrayList<>();
+            for(Contact contact : person.getContacts()){
+                ContactRequest contactRequest = new ContactRequest();
+                contactRequest.setName(contact.getName());
+                contactRequest.setPhone(contact.getPhone());
+                contactRequest.setEmergencyContact(contact.isEmergency());
+                contactRequestList.add(contactRequest);
+            }
+
+            personRequest.setEmergencyContacts(contactRequestList);
+            personRequest.setAddress(person.getAddress().getAddressLineOne());
+            personRequest.setName(person.getName());
+            personRequest.setEmail(person.getEmail());
+            personRequest.setCellphone(person.getCellphone());
+            personRequest.setRemainDays(remainDays);
+            return personRequest;
         }
 
-        personRequest.setEmergencyContacts(contactRequestList);
-        personRequest.setAddress(person.getAddress().getAddressLineOne());
-        personRequest.setName(person.getName());
-        personRequest.setEmail(person.getEmail());
-        personRequest.setCellphone(person.getCellphone());
-        personRequest.setRemainDays(remainDays);
-        return personRequest;
     }
 
     @Transactional
@@ -84,12 +87,11 @@ public class ProfileService {
         newPerson.setCellphone(personRequest.getCellphone());
         newPerson.setUserId(userId);
 
-        newPerson.setRemainingFloadingDays(DEFAULT_FLOATING_DAY);
-        newPerson.setRemainingVacationDays(DEFAULT_VACATION_DAY);
+        newPerson.setRemainingFloadingDays(personRequest.getRemainDays().getRemainingFloadingDays());
+        newPerson.setRemainingVacationDays(personRequest.getRemainDays().getRemainingFloadingDays());
         newPerson = personDAO.setPerson(newPerson);
 
         //save address
-
         Address address = new Address();
         address.setAddressLineOne(personRequest.getAddress());
         address.setPerson(newPerson);
@@ -97,7 +99,6 @@ public class ProfileService {
 
 
         //save contacts
-
         for(ContactRequest each : personRequest.getEmergencyContacts()){
             Contact newContact = new Contact();
             newContact.setPerson(newPerson);

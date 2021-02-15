@@ -1,5 +1,0 @@
-spring:
-  data:
-    mongodb:
-      uri: mongodb+srv://dbUser:dbUser@cluster0.htwjn.mongodb.net/<testdata>?retryWrites=true&w=majority
-      database: testdata

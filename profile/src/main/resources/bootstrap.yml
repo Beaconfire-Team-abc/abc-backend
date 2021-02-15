@@ -4,7 +4,10 @@ spring:
   cloud:
     config:
       name: profile
-      label: abc
+      label: yishen
       uri: "http://localhost:8888"
   profiles:
     active: development
+
+
+

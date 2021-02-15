@@ -19,7 +19,7 @@ public class DefaultTimesheetController {
     @GetMapping("/{id}")
     public ResponseEntity<DefaultTimesheet> getDefaultTimesheetOrCreateByUserID(@PathVariable(value = "id") Integer id){
         List<Day> days = new ArrayList<>();
-        String[] week = {"Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"};
+        String[] week = {"Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"};
         for(int i = 0; i < 7; i++){
             Day day = Day.builder().name(week[i]).date("").startTime("9:00 A.M.").endTime("6:00 P.M.").isFloatingDay(false).isHoliday(false).isVacationDay(false).totalHours(8F).build();
             days.add(day);

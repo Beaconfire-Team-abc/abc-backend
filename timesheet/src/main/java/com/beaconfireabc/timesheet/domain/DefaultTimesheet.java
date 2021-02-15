@@ -23,10 +23,10 @@ public class DefaultTimesheet {
     private Float totalCompensatedHour;
     private String approvalStatus;
     private String submissionStatus;
-    private Integer floatingdays;
-    private Integer vacationdays;
-    private Integer holidays;
-    private String filepath;
+    private Integer numOfFloatingDays;
+    private Integer numOfVacationDays;
+    private Integer numOfHolidays;
+    private String filePath;
     private Boolean isFileApproved;
 
 }

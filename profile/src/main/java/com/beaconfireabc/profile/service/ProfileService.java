@@ -20,6 +20,8 @@ import java.util.List;
 
 @Component
 public class ProfileService {
+    private final int DEFAULT_REMAIN_VACTIONDAYS = 3;
+    private final int  DEFAULT_REMAIN_FLOADINGDAYS = 3;
 
     private PersonDAO personDAO;
     private AddressDAO addressDAO;
@@ -38,7 +40,7 @@ public class ProfileService {
     public PersonRequest getProfileByUserId(Integer id) {
         Person person = personDAO.getPersonByUserId(id);
         if(person == null){
-            return null;
+            return setProfileByUserId(id);
         }
         else{
             PersonRequest personRequest = new PersonRequest();
@@ -67,65 +69,57 @@ public class ProfileService {
 
     }
 
-    @Transactional
-    public  PersonRequest setOrUpdateProfileByUserId(int userId, PersonRequest personRequest){
-        Person person = personDAO.getPersonByUserId(userId);
-        if(person == null){
-            return setProfileByUserId(userId, personRequest);
-        }
-        else{
-            return updateProfileByUserId(userId, personRequest);
-        }
-    }
 
     @Transactional
-    public PersonRequest setProfileByUserId(int userId, PersonRequest personRequest){
-        //save person
+    public PersonRequest setProfileByUserId(int userId){
+
         Person newPerson = new Person();
-        newPerson.setEmail(personRequest.getEmail());
-        newPerson.setName(personRequest.getName());
-        newPerson.setCellphone(personRequest.getCellphone());
-        newPerson.setUserId(userId);
 
-        newPerson.setRemainingFloadingDays(personRequest.getRemainDays().getRemainingFloadingDays());
-        newPerson.setRemainingVacationDays(personRequest.getRemainDays().getRemainingFloadingDays());
+        newPerson.setUserId(userId);
+        newPerson.setRemainingFloadingDays(DEFAULT_REMAIN_VACTIONDAYS);
+        newPerson.setRemainingVacationDays(DEFAULT_REMAIN_FLOADINGDAYS);
         newPerson = personDAO.setPerson(newPerson);
 
-        //save address
         Address address = new Address();
-        address.setAddressLineOne(personRequest.getAddress());
         address.setPerson(newPerson);
         addressDAO.setAddress(address);
 
+        Contact newContact1 = new Contact();
+        newContact1.setPerson(newPerson);
+        newContact1.setEmergency(true);
+        contactDAO.setContact(newContact1);
 
-        //save contacts
-        for(ContactRequest each : personRequest.getEmergencyContacts()){
-            Contact newContact = new Contact();
-            newContact.setPerson(newPerson);
-            newContact.setEmergency(each.isEmergencyContact());
-            newContact.setName(each.getName());
-            newContact.setPhone(each.getPhone());
-            contactDAO.setContact(newContact);
-        }
+        Contact newContact2 = new Contact();
+        newContact2.setPerson(newPerson);
+        newContact2.setEmergency(true);
+        contactDAO.setContact(newContact2);
+
+        RemainDaysRequest remainDaysRequest = new RemainDaysRequest();
+        remainDaysRequest.setRemainingFloadingDays(DEFAULT_REMAIN_FLOADINGDAYS);
+        remainDaysRequest.setRemainingVacationDays(DEFAULT_REMAIN_VACTIONDAYS);
+
+        PersonRequest personRequest = new PersonRequest();
+        personRequest.setRemainDays(remainDaysRequest);
+        List<ContactRequest> contactRequestList = new ArrayList<>();
+        contactRequestList.add(new ContactRequest("firstname,lastname", "cellphone",true));
+        contactRequestList.add(new ContactRequest("firstname,lastname", "cellphone",true));
+        personRequest.setEmergencyContacts(contactRequestList);
 
         return personRequest;
-
     }
 
     @Transactional
     public PersonRequest updateProfileByUserId(int userId, PersonRequest personRequest) {
-        Person person = this.personDAO.getPersonByPersonId(userId);
-        // update person
+        Person person = this.personDAO.getPersonByUserId(userId);
+
         person.setEmail(personRequest.getEmail());
         person.setName(personRequest.getName());
         person.setCellphone(personRequest.getCellphone());
 
-
-        // update address
         Address address = addressDAO.getAddressById(person.getAddress().getId());
         address.setAddressLineOne(personRequest.getAddress());
+        addressDAO.setAddress(address);
 
-        // update emergence contact
         List<Contact> contacts = person.getContacts();
         List<ContactRequest> newContacts = personRequest.getEmergencyContacts();
         for (int i = 0; i < contacts.size(); i++) {
@@ -134,7 +128,6 @@ public class ProfileService {
             contactDAO.setContact(contacts.get(i));
         }
 
-        //remainsDaysUnchange
         RemainDaysRequest remainDays = new RemainDaysRequest();
         remainDays.setRemainingFloadingDays(person.getRemainingFloadingDays());
         remainDays.setRemainingVacationDays(person.getRemainingVacationDays());

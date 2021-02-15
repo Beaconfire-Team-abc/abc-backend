@@ -24,8 +24,7 @@ public class ProfileController {
     }
 
     @GetMapping(value="/{userId}")
-    public PersonResponse getProfile(@PathVariable String userId) {
-
+    public PersonResponse getOrCreateProfile(@PathVariable String userId) {
         PersonResponse personResponse = new PersonResponse();
         PersonRequest responsePerson = this.profileService.getProfileByUserId(Integer.parseInt(userId));
         if (responsePerson != null) {
@@ -56,7 +55,7 @@ public class ProfileController {
     @PostMapping(value="/update-person/{userId}")
     public PersonResponse updateProfile(@RequestBody PersonRequest personRequest, @PathVariable String userId) {
         PersonResponse personResponse = new PersonResponse();
-        PersonRequest responsePerson = this.profileService.setOrUpdateProfileByUserId(Integer.parseInt(userId), personRequest);
+        PersonRequest responsePerson = this.profileService.updateProfileByUserId(Integer.parseInt(userId), personRequest);
         if (responsePerson != null) {
             personResponse.setPerson(responsePerson);
             preparePersonResponse(personResponse, true, "");

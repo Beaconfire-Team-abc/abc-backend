@@ -1,7 +1,7 @@
 package com.beaconfireabc.timesheet;
 
 import com.beaconfireabc.timesheet.domain.Timesheet;
-import com.beaconfireabc.timesheet.repository.DefaultRepository;
+import com.beaconfireabc.timesheet.repository.DefaultTimesheetRepository;
 import com.beaconfireabc.timesheet.repository.TimesheetRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
@@ -11,41 +11,43 @@ import org.springframework.cloud.netflix.eureka.EnableEurekaClient;
 
 @SpringBootApplication
 @EnableEurekaClient
-public class TimesheetApplication implements CommandLineRunner {
+public class TimesheetApplication {
 
-    @Autowired
-    TimesheetRepository repository;
-    @Autowired
-    DefaultRepository defaultRepository;
+//    @Autowired
+//    TimesheetRepository repository;
+//    @Autowired
+//    DefaultTimesheetRepository defaultRepository;
 
     public static void main(String[] args) {
         SpringApplication.run(TimesheetApplication.class, args);
     }
-    // commit test
-
-    @Override
-    public void run(String... args) throws Exception {
-        repository.deleteAll();
-        defaultRepository.deleteAll();
 
 
-        System.out.println("Timesheets found with findAll():");
-        System.out.println("-------------------------------");
-        for (Timesheet timesheet : repository.findAll()) {
-            System.out.println(timesheet);
-        }
-        System.out.println();
-
-        // fetch an individual customer
-        System.out.println("Timesheet found with findByWeekending('02/12/21'):");
-        System.out.println("--------------------------------");
-        System.out.println(repository.findByweekending("02/12/21").orElse(null));
-
-        System.out.println("Timesheets found with findByUserID(1):");
-        System.out.println("--------------------------------");
-        for (Timesheet timesheet : repository.findByUserID(1)) {
-            System.out.println(timesheet);
-        }
-    }
+//    @Override
+//    public void run(String... args) throws Exception {
+//        repository.deleteAll();
+//        defaultRepository.deleteAll();
+//
+//        repository.save(Timesheet.builder().userID(1).weekending("02/12/21").build());
+//        System.out.println("Timesheets found with findAll():");
+//        System.out.println("-------------------------------");
+//        for (Timesheet timesheet : repository.findAll()) {
+//            System.out.println(timesheet);
+//        }
+//        System.out.println();
+//
+//
+//        System.out.println("Timesheets found with findByUserID(1):");
+//        System.out.println("--------------------------------");
+//        for (Timesheet timesheet : repository.findByUserID(1)) {
+//            System.out.println(timesheet);
+//        }
+//
+//        System.out.println(("Timesheet found with findByUserIDAndWeekending(1,'02/12/21')"));
+//        System.out.println("--------------------------------");
+//
+//        System.out.println(repository.findByUserIDAndWeekendingIgnoreCase(1,"02/12/21").orElse(null));
+//
+//    }
 
 }

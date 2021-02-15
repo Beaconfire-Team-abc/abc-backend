@@ -9,7 +9,6 @@ import lombok.*;
 @NoArgsConstructor
 @Builder
 @ToString
-//@JsonFormat(shape=JsonFormat.Shape.ARRAY)
 public class Day {
     private String name;
     private String date;

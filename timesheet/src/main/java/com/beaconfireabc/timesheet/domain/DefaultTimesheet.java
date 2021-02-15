@@ -12,7 +12,6 @@ import java.util.List;
 @NoArgsConstructor
 @Builder
 @ToString
-//@QueryEntity
 @Document(collection = "DefaultTimesheet")
 public class DefaultTimesheet {
     @Id

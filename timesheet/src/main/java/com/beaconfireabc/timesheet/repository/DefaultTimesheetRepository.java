@@ -7,6 +7,6 @@ import org.springframework.data.mongodb.repository.MongoRepository;
 import java.util.List;
 import java.util.Optional;
 
-public interface DefaultRepository extends MongoRepository<DefaultTimesheet, String> {
+public interface DefaultTimesheetRepository extends MongoRepository<DefaultTimesheet, String> {
     Optional<DefaultTimesheet> findByUserID(Integer userID);
 }

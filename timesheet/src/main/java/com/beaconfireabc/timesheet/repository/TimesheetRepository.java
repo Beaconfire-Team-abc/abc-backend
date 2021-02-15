@@ -12,9 +12,10 @@ public interface TimesheetRepository extends MongoRepository<Timesheet, String> 
     List<Timesheet> findByUserID(Integer userID);
 
 
-    Optional<Timesheet> findByweekending(String weekending);
 
-//    Optional<Object> findById(Integer id);
+    Optional<Timesheet> findByUserIDAndWeekendingIgnoreCase(Integer userID, String weekending);
+
+
 
 }
 

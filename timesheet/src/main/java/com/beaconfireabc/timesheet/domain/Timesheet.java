@@ -14,7 +14,6 @@ import java.util.*;
 @NoArgsConstructor
 @Builder
 @ToString
-//@QueryEntity
 @Document(collection = "Timesheet")
 public class Timesheet {
     @Id

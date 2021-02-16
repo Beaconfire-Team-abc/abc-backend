@@ -20,18 +20,20 @@ public class TimeSheetController {
     @Autowired
     private TimesheetClient timesheetClient;
 
+    // get timesheet list
     @GetMapping("/{userId}")
     public ResponseEntity<List<Object>> getTimeSheets(@PathVariable String userId) {
         return timesheetClient.getTimeSheets(userId);
     }
 
+    // get timesheet by weekending day
     @GetMapping("/{userId}/weekending")
-    public ResponseEntity<TimeSheet> getTimeSheetByWeekendingDay(@PathVariable String userId, @RequestParam("weekending") String weekend){
+    public ResponseEntity<TimeSheet> getTimeSheetByWeekendingDay(@PathVariable String userId, @RequestParam("weekend") String weekend){
         calculateWeekendingDay(weekend);
 
         Map<String, String> parameters = new LinkedHashMap<>();
-        parameters.put("weekend",weekend);
-        TimeSheet timeSheet = timesheetClient.getTimeSheetByWeekendingDay(userId, parameters);
+        parameters.put("weekending",weekend);
+        TimeSheet timeSheet = timesheetClient.getTimeSheetByWeekendingDay(parameters, userId);
         if (timeSheet.getWeekending() == null){
             timeSheet = timesheetClient.getDefaultTimeSheet(userId);
             addDateInDefaultTimeSheet(timeSheet, weekend);
@@ -39,8 +41,15 @@ public class TimeSheetController {
         return ResponseEntity.ok(timeSheet);
     }
 
+    // update default timesheet
+    @PostMapping("/defaulttimesheet/save")
+    public void updateDefaultTimeSheet(@RequestBody TimeSheet timeSheet) {
+        timesheetClient.updateDefaultTimeSheet(timeSheet);
+    }
+
+    //update timesheet
     @PostMapping("/save")
-    public void postTest(@RequestBody TimeSheet timeSheet) {
+    public void updateTimeSheet(@RequestBody TimeSheet timeSheet) {
         timesheetClient.updateTimeSheet(timeSheet);
     }
 
@@ -52,6 +61,10 @@ public class TimeSheetController {
             LocalDate then = weekendingDate.minusDays(7-1-i);
             timeSheet.getDays().get(i).setDate(then.format(dateFormatter));
         }
+    }
+
+    public void calculateWeekendingDay(String weekend){
+        // conetend needed
     }
 
 //    @GetMapping("/{userId}/defaulttimesheet")

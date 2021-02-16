@@ -40,7 +40,7 @@ public interface TimesheetClient {
     // get timesheet by weekendingday
     @RequestLine("GET")
     @RequestMapping("/timesheet/{userId}/weekending?{parameters}")
-    TimeSheet getTimeSheetByWeekendingDay(@PathVariable String userId, @SpringQueryMap Map<String, String> parameters);
+    TimeSheet getTimeSheetByWeekendingDay(@SpringQueryMap Map<String, String> parameters, @PathVariable String userId);
 
     // post timesheet
     @RequestLine("POST")
@@ -49,8 +49,13 @@ public interface TimesheetClient {
 
     // get default timesheet
     @RequestLine("GET")
-    @RequestMapping("/timesheet/{userId}/defaulttimesheet")
+    @RequestMapping("/timesheet/default/{userId}")
     TimeSheet getDefaultTimeSheet(@PathVariable String userId);
+
+    // post default timesheet
+    @RequestLine("POST")
+    @RequestMapping("/timesheet/default/save")
+    void updateDefaultTimeSheet(@RequestBody TimeSheet timeSheet);
 
     // get timesheet
     // need to be implemented

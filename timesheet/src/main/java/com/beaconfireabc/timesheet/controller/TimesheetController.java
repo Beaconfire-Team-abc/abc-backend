@@ -28,7 +28,7 @@ public class TimesheetController {
 
 
     @GetMapping("/test")
-    public ResponseEntity<String> getTestDomain(@RequestParam("weekending") String weekend){
+    public ResponseEntity<String> getTestDomain(@RequestParam("weekend") String weekend){
         System.out.println(weekend);
         return ResponseEntity.ok("td");
     }
@@ -46,13 +46,12 @@ public class TimesheetController {
 
     @GetMapping("/{id}/weekending")
     public ResponseEntity<Timesheet> getTimesheetByWeekendingAndUserID(@RequestParam String weekending, @PathVariable(value = "id") Integer id){
-
+        System.out.println();
         return ResponseEntity.ok((timesheetRepository.findByUserIDAndWeekendingIgnoreCase(id,weekending).orElse(new Timesheet())));
     }
 
     @PostMapping("/save")
     public void saveTimesheet(@RequestBody Timesheet timesheet){
-
         timesheetRepository.save(timesheet);
     }
 }

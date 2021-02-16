@@ -20,14 +20,16 @@ public class DefaultTimesheetController {
     public ResponseEntity<DefaultTimesheet> getDefaultTimesheetOrCreateByUserID(@PathVariable(value = "id") Integer id){
         List<Day> days = new ArrayList<>();
         String[] week = {"Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"};
-        for (int i = 0; i < 5; i++){
-            Day day = Day.builder().name(week[i]).date("").startTime("9:00 A.M.").endTime("6:00 P.M.").isFloatingDay(false).isHoliday(false).isVacationDay(false).totalHours(8F).build();
-            days.add(day);
+        for (int i = 0; i < 7; i++){
+            if (i == 0 || i == 6) {
+                Day day = Day.builder().name(week[i]).date("").startTime("9:00 A.M.").endTime("6:00 P.M.").isFloatingDay(false).isHoliday(false).isVacationDay(false).totalHours(0F).build();
+                days.add(day);
+            } else {
+                Day day = Day.builder().name(week[i]).date("").startTime("9:00 A.M.").endTime("6:00 P.M.").isFloatingDay(false).isHoliday(false).isVacationDay(false).totalHours(8F).build();
+                days.add(day);
+            }
         }
-        for(int i = 5; i < 7; i++){
-            Day day = Day.builder().name(week[i]).date("").startTime("9:00 A.M.").endTime("6:00 P.M.").isFloatingDay(false).isHoliday(false).isVacationDay(false).totalHours(0F).build();
-            days.add(day);
-        }
+
         DefaultTimesheet defaultTimesheet = DefaultTimesheet.builder().userID(id).weekending("").totalBillingHour(40F).totalCompensatedHour(40F).numOfFloatingDays(0)
                 .numOfHolidays(0).numOfVacationDays(0).approvalStatus("N/A").submissionStatus("Not Started").filePath("").isFileApproved(false).days(days).build();
 

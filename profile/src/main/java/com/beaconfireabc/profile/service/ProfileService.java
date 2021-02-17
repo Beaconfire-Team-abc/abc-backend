@@ -136,7 +136,6 @@ public class ProfileService {
         return personRequest;
     }
 
-
     @Transactional
     public RemainDaysRequest updateRemainDaysByUserId(int userId, RemainDaysRequest remainDaysRequest) {
         Person person = this.personDAO.getPersonByPersonId(userId);

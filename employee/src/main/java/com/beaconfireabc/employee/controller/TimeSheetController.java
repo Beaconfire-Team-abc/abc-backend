@@ -33,8 +33,10 @@ public class TimeSheetController {
         Map<String, String> parameters = new LinkedHashMap<>();
         parameters.put("weekending",weekend);
         TimeSheet timeSheet = timesheetClient.getTimeSheetByWeekendingDay(parameters, userId);
+        String timeSheetId = timeSheet.getId();
         if (timeSheet.getWeekending() == null){
             timeSheet = timesheetClient.getDefaultTimeSheet(userId);
+            timeSheet.setId(timeSheetId);
             addDateInDefaultTimeSheet(timeSheet, weekend);
         }
         return ResponseEntity.ok(timeSheet);

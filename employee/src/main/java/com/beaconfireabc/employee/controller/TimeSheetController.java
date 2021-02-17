@@ -46,6 +46,8 @@ public class TimeSheetController {
         Integer userId = timeSheet.getUserID();
         TimeSheet defaultTimeSheet = timesheetClient.getDefaultTimeSheet(userId.toString());
         timeSheet.setId(defaultTimeSheet.getId());
+        timeSheet.setSubmissionStatus("Not Started");
+        timeSheet.setApprovalStatus("N/A");
         timesheetClient.updateDefaultTimeSheet(timeSheet);
     }
 

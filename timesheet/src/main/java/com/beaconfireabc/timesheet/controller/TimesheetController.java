@@ -21,7 +21,7 @@ public class TimesheetController {
 
     @GetMapping("/{id}")
     public ResponseEntity<List<Timesheet>> getTimesheetByUserID(@PathVariable(value = "id") Integer id){
-        return ResponseEntity.ok(timesheetRepository.findByUserID(id));
+        return ResponseEntity.ok(timesheetRepository.findByUserIDOrderByWeekendingDesc(id));
     }
 
     @GetMapping("/{id}/weekending")

@@ -22,7 +22,6 @@ public class TimesheetApplication {
         SpringApplication.run(TimesheetApplication.class, args);
     }
 
-
 //    @Override
 //    public void run(String... args) throws Exception {
 //        repository.deleteAll();

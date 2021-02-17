@@ -29,8 +29,7 @@ public class TimeSheetController {
     // get timesheet by weekending day
     @GetMapping("/{userId}/weekending")
     public ResponseEntity<TimeSheet> getTimeSheetByWeekendingDay(@PathVariable String userId, @RequestParam("weekend") String weekend){
-        calculateWeekendingDay(weekend);
-
+        weekend = calculateWeekendingDay(weekend);
         Map<String, String> parameters = new LinkedHashMap<>();
         parameters.put("weekending",weekend);
         TimeSheet timeSheet = timesheetClient.getTimeSheetByWeekendingDay(parameters, userId);
@@ -44,6 +43,9 @@ public class TimeSheetController {
     // update default timesheet
     @PostMapping("/defaulttimesheet/save")
     public void updateDefaultTimeSheet(@RequestBody TimeSheet timeSheet) {
+        Integer userId = timeSheet.getUserID();
+        TimeSheet defaultTimeSheet = timesheetClient.getDefaultTimeSheet(userId.toString());
+        timeSheet.setId(defaultTimeSheet.getId());
         timesheetClient.updateDefaultTimeSheet(timeSheet);
     }
 
@@ -53,9 +55,10 @@ public class TimeSheetController {
         timesheetClient.updateTimeSheet(timeSheet);
     }
 
+    // generate timesheet by default timesheet
     void addDateInDefaultTimeSheet(TimeSheet timeSheet, String weekend){
         timeSheet.setWeekending(weekend);
-        DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("MM/dd/yyyy");
+        DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
         LocalDate weekendingDate = LocalDate.parse(weekend, dateFormatter);
         for (int i=0;i<7;i++){
             LocalDate then = weekendingDate.minusDays(7-1-i);
@@ -63,8 +66,13 @@ public class TimeSheetController {
         }
     }
 
-    public void calculateWeekendingDay(String weekend){
-        // conetend needed
+    // find the weekending day date
+    public String calculateWeekendingDay(String weekday){
+        DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        LocalDate date = LocalDate.parse(weekday, dateFormatter);
+        int dayDiff = 6 - date.getDayOfWeek().getValue();
+        LocalDate weekendingDay = date.plusDays(dayDiff>=0?dayDiff:6);
+        return weekendingDay.format(dateFormatter);
     }
 
 //    @GetMapping("/{userId}/defaulttimesheet")

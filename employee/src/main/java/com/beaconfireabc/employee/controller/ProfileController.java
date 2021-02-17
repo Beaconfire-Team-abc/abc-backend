@@ -9,6 +9,8 @@ import com.beaconfireabc.employee.domain.response.RemainDaysResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
+
 @RestController
 @RequestMapping("/profile")
 public class ProfileController {
@@ -17,7 +19,9 @@ public class ProfileController {
     private ProfileClient profileClient;
 
     @GetMapping("/{userId}")
-    public PersonResponse getProfile(@PathVariable String userId){
+    public PersonResponse getProfile(HttpServletRequest request, @PathVariable String userId){
+//        System.out.println("profile get profile");
+//        System.out.println(request.getSession().getAttribute("userId"));
         return profileClient.getProfile(userId);
     }
 

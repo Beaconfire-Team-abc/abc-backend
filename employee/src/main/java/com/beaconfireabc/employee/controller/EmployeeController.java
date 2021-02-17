@@ -76,8 +76,8 @@ public class EmployeeController {
 //    @PostMapping("/profile/remiandays/update/{userId}")
     public RemainDaysResponse updateReminDays(TimeSheet oldTimeSheet, TimeSheet newTimeSheet, String userId){
         RemainDaysRequest remainDays = profileClient.getProfile(userId).getPerson().getRemainDays();
-        int floatingDaysDiff = oldTimeSheet.getFloatingdays() - newTimeSheet.getFloatingdays();
-        int vacationDaysDiff = oldTimeSheet.getVacationdays() - newTimeSheet.getVacationdays();
+        int floatingDaysDiff = oldTimeSheet.getNumOfFloatingDays() - newTimeSheet.getNumOfFloatingDays();
+        int vacationDaysDiff = oldTimeSheet.getNumOfVacationDays() - newTimeSheet.getNumOfVacationDays();
         remainDays.setRemainingFloadingDays(remainDays.getRemainingFloadingDays() + floatingDaysDiff);
         remainDays.setRemainingVacationDays(remainDays.getRemainingVacationDays() + vacationDaysDiff);
         return profileClient.updateRemainDays(remainDays, userId);

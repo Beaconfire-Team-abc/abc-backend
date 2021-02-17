@@ -22,7 +22,7 @@ public class DefaultTimesheetController {
         String[] week = {"Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"};
         for (int i = 0; i < 7; i++){
             if (i == 0 || i == 6) {
-                Day day = Day.builder().name(week[i]).date("").startTime("9:00 A.M.").endTime("6:00 P.M.").isFloatingDay(false).isHoliday(false).isVacationDay(false).totalHours(0F).build();
+                Day day = Day.builder().name(week[i]).date("").startTime("N/A").endTime("N/A").isFloatingDay(false).isHoliday(false).isVacationDay(false).totalHours(0F).build();
                 days.add(day);
             } else {
                 Day day = Day.builder().name(week[i]).date("").startTime("9:00 A.M.").endTime("6:00 P.M.").isFloatingDay(false).isHoliday(false).isVacationDay(false).totalHours(8F).build();
